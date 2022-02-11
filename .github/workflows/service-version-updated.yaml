@@ -29,6 +29,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+        with:
+          repository: smerschjohann/workflowtest
+          ref: main
       - name: Create report file
         run: echo "${{ inputs.version }}" > version-${{ inputs.service }}.txt
       - name: Commit report

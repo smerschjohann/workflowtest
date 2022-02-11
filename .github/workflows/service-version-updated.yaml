@@ -1,0 +1,40 @@
+name: update service version
+on:
+  workflow_call:
+    inputs:
+      service:
+        description: the service name
+        required: false
+        type: string
+        default: ""
+      version:
+        description: the service version
+        required: false
+        type: string
+        default: "1.0.0"
+
+  workflow_dispatch:
+    inputs:
+      service:
+        description: the service name
+        required: false
+        default: ""
+      version:
+        description: the service version
+        required: false
+        default: "1.0.0"
+
+jobs:
+  modify_chart:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Create report file
+        run: echo "${{ inputs.version }}" > version-${{ inputs.service }}.txt
+      - name: Commit report
+        run: |
+          git add .
+          git config --global user.name 'Chart Updater'
+          git config --global user.email 'chart-updater@users.noreply.github.com'
+          git commit -m "update ${{ inputs.service }}: version=${{ inputs.version }}"
+          git push
